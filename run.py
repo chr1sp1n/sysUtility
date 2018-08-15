@@ -9,6 +9,7 @@ sys.path.append(os.path.abspath('./shared'))
 from gi.repository import Gtk, GObject
 from chr1sp1n_imm import IconMenuMaker
 from gi.repository import Notify
+from chr1sp1n_north_position import North
 
 APPINDICATOR_ID = 'chr1sp1n_system_utility'
 

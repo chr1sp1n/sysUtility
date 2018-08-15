@@ -7,14 +7,15 @@ gi.require_version('Gtk', '3.0')
 gi.require_version('AppIndicator3', '0.1')
 from gi.repository import Gtk, AppIndicator3, GObject
 from threading import Thread
+from chr1sp1n_labas_sensors import North
 
 class IconMenuMaker:
 
     """Icon Maker class"""
-
     menu_items = 0
 
     def __init__(self, app_id, icon = None):
+        self.north = North()
         self.app_id = app_id
         if icon == None:
             icon = os.path.abspath(os.path.dirname(__file__) + '/assets/imm.svg')
@@ -26,7 +27,7 @@ class IconMenuMaker:
         self.menu.show_all()
         self.indicator.set_menu(self.menu)
         self.indicator.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
-        self.update = Thread(target = self.ciao)
+        self.update = Thread(target = self.get_north)
         self.update.setDaemon(True)
         self.update.start()
 
@@ -40,13 +41,8 @@ class IconMenuMaker:
     def add_menu_separator(self):
         self.menu.append(Gtk.SeparatorMenuItem())
 
-    def ciao(self):
-        t = 2
+    def get_north(self):
         while True:
             time.sleep(1)
-            mention = str(t)+" Monkeys"
-            GObject.idle_add( self.indicator.set_title, mention, priority = GObject.PRIORITY_DEFAULT ) 
-            t += 1
-
-        # apply the interface update using  GObject.idle_add()
-        
+            n = 'North: ' + str(self.north.read())
+            GObject.idle_add( self.indicator.set_title, n, priority = GObject.PRIORITY_DEFAULT )
